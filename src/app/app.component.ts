@@ -29,7 +29,6 @@ export class AppComponent implements OnInit {
     })
 
     const onScanSuccess = (decodedText) => {
-      html5QrcodeScanner.clear()
       try {
         this.decodedData = JSON.parse(decodedText)
         if (this.instanceOfObjeto(this.decodedData)) {
@@ -66,8 +65,6 @@ export class AppComponent implements OnInit {
       five: this.demoForm.get('five').value,
     }
     this.data = JSON.stringify(obj)
-    console.log(this.data);
-    
   }
 
   printElem() {
