@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import * as printJS from 'print-js';
 import { Objeto } from './objeto.model';
@@ -47,7 +46,7 @@ export class AppComponent implements OnInit {
         this.invalid = true
       }
     }
-    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250, formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE] }, false)
+    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 1, qrbox: 250, formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE] }, false)
     html5QrcodeScanner.render(onScanSuccess, null)
   }
 
@@ -57,7 +56,7 @@ export class AppComponent implements OnInit {
 
   generate() {
     const obj: Objeto = {
-      discriminator: 'I-AM-OBJECTO',
+      discriminator: 'I-AM-OBJETO',
       one: this.demoForm.get('one').value,
       two: this.demoForm.get('two').value,
       three: this.demoForm.get('three').value,
