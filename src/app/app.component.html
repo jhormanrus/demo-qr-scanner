@@ -4,7 +4,7 @@
   </div>
   <form [formGroup]="demoForm">
     <div class="form-row">
-      <ng-container *ngIf="!generatedUrl">
+      <ng-container *ngIf="!data">
         <div class="col-6">
           <div class="form-group">
             <label for="one">Input one</label>
@@ -36,17 +36,17 @@
           </div>
         </div>
       </ng-container>
-      <div class="col-12 text-center" *ngIf="generatedUrl">
+      <div class="col-12 text-center" *ngIf="data">
         <div id="2print">
-          <ngx-qrcode elementType="url" [value]="generatedUrl"></ngx-qrcode>
+          <ngx-qrcode elementType="url" [value]="data"></ngx-qrcode>
         </div>
       </div>
       <div class="col-12">
-        <button *ngIf="!generatedUrl" (click)="generateUrl()" type="button" class="btn btn-success btn-block">Generar</button>
+        <button *ngIf="!data" (click)="generate()" type="button" class="btn btn-success btn-block">Generar</button>
       </div>
-      <ng-container *ngIf="generatedUrl">
+      <ng-container *ngIf="data">
         <div class="col-6">
-          <button (click)="generatedUrl = null" type="button" class="btn btn-info btn-block">Volver</button>
+          <button (click)="data = null" type="button" class="btn btn-info btn-block">Volver</button>
         </div>
         <div class="col-6">
           <button (click)="printElem()" type="button" class="btn btn-secondary btn-block">Imprimir</button>
@@ -55,6 +55,9 @@
     </div>
   </form>
   <div class="mt-4">
+    <div *ngIf="invalid" class="alert alert-danger" role="alert">
+      Código QR no válido
+    </div>
     <div style="width: 100%" id="reader"></div>
   </div>
 </div>
