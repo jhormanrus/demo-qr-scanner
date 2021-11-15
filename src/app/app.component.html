@@ -1,0 +1,60 @@
+<div class="container">
+  <div class="py-5 text-center">
+    <h2>Demo</h2>
+  </div>
+  <form [formGroup]="demoForm">
+    <div class="form-row">
+      <ng-container *ngIf="!generatedUrl">
+        <div class="col-6">
+          <div class="form-group">
+            <label for="one">Input one</label>
+            <input type="text" class="form-control" id="one" formControlName="one">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="one">Input two</label>
+            <input type="text" class="form-control" id="two" formControlName="two">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="one">Input three</label>
+            <input type="text" class="form-control" id="three" formControlName="three">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="form-group">
+            <label for="one">Input four</label>
+            <input type="text" class="form-control" id="four" formControlName="four">
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-group">
+            <label for="one">Input five</label>
+            <input type="text" class="form-control" id="five" formControlName="five">
+          </div>
+        </div>
+      </ng-container>
+      <div class="col-12 text-center" *ngIf="generatedUrl">
+        <div id="2print">
+          <ngx-qrcode elementType="url" [value]="generatedUrl"></ngx-qrcode>
+        </div>
+      </div>
+      <div class="col-12">
+        <button *ngIf="!generatedUrl" (click)="generateUrl()" type="button" class="btn btn-success btn-block">Generar</button>
+      </div>
+      <ng-container *ngIf="generatedUrl">
+        <div class="col-6">
+          <button (click)="generatedUrl = null" type="button" class="btn btn-info btn-block">Volver</button>
+        </div>
+        <div class="col-6">
+          <button (click)="printElem()" type="button" class="btn btn-secondary btn-block">Imprimir</button>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+  <div class="mt-4">
+    <div style="width: 100%" id="reader"></div>
+  </div>
+</div>
