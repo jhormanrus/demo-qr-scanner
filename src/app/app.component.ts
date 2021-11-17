@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Html5Qrcode, Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import { Html5Qrcode, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import * as printJS from 'print-js';
 import { Objeto } from './objeto.model';
 
@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   decodedData: Objeto
   invalid = false
   notFound = false
+  html5QrCode: Html5Qrcode
 
   constructor(private fb: FormBuilder) {}
 
@@ -27,12 +28,16 @@ export class AppComponent implements OnInit {
       four: this.fb.control('dato 4'),
       five: this.fb.control('dato 5')
     })
-    const html5QrCode = new Html5Qrcode("reader", { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false })
-    html5QrCode.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
+    this.html5QrCode = new Html5Qrcode("reader", { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false })
+    this.initScanner()
+  }
+
+  initScanner() {
+    this.html5QrCode.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
       try {
         this.decodedData = JSON.parse(decodedText)
         if (this.instanceOfObjeto(this.decodedData)) {
-          html5QrCode.clear()
+          this.html5QrCode.clear()
         } else {
           this.decodedData = null
           this.invalid = true
@@ -64,19 +69,7 @@ export class AppComponent implements OnInit {
       if (devices && devices.length) {
         this.notFound = false
         const html5QrCode2 = new Html5Qrcode("reader", { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false })
-        html5QrCode2.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
-          try {
-            this.decodedData = JSON.parse(decodedText)
-            if (this.instanceOfObjeto(this.decodedData)) {
-              html5QrCode2.clear()
-            } else {
-              this.decodedData = null
-              this.invalid = true
-            }
-          } catch {
-            this.invalid = true
-          }
-        }, null).catch(() => this.notFound = true)
+        this.initScanner()
       }
     })
   }
