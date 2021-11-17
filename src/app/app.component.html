@@ -11,6 +11,7 @@
     </li>
   </ul>
   <div class="tab-content" id="myTabContent">
+    <!--* tab para generar qr -->
     <div class="tab-pane fade show active" id="gen" role="tabpanel" aria-labelledby="gen-tab">
       <form [formGroup]="demoForm" class="mt-4">
         <div class="form-row">
@@ -65,13 +66,16 @@
         </div>
       </form>
     </div>
+    <!--* tab para scanear qr -->
     <div class="tab-pane fade" id="scan" role="tabpanel" aria-labelledby="scan-tab">
       <div [class.d-none]="decodedData" class="mt-4">
         <div *ngIf="invalid" class="alert alert-danger" role="alert">Código QR no válido</div>
         <div *ngIf="notFound" class="alert alert-danger" role="alert">Cámara no encontrada o no se ha dado permiso al uso de la cámara <button (click)="getPermission()" type="button" class="btn btn-info ml-2">Dar permiso</button></div>
+        <!--* scanner (es necesario el id 'reader') -->
         <div style="width: 100%" id="reader"></div>
       </div>
       <div *ngIf="decodedData" class="mt-4">
+        <!--* mostrar objeto escaneado -->
         <pre>{{ decodedData | json }}</pre>
         <button (click)="decodedData = null" type="button" class="btn btn-info btn-block">Volver a scanear</button>
       </div>
