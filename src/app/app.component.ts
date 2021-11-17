@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
+import { Html5Qrcode, Html5QrcodeScanner, Html5QrcodeSupportedFormats } from 'html5-qrcode';
 import * as printJS from 'print-js';
 import { Objeto } from './objeto.model';
 
@@ -26,28 +26,20 @@ export class AppComponent implements OnInit {
       four: this.fb.control('dato 4'),
       five: this.fb.control('dato 5')
     })
-
-    const onScanSuccess = (decodedText) => {
+    const html5QrCode = new Html5Qrcode("reader", { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false })
+    html5QrCode.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
       try {
         this.decodedData = JSON.parse(decodedText)
         if (this.instanceOfObjeto(this.decodedData)) {
-          this.invalid = false
-          this.demoForm.patchValue({
-            one: this.decodedData.one,
-            two: this.decodedData.two,
-            three: this.decodedData.three,
-            four: this.decodedData.four,
-            five: this.decodedData.five
-          })
+          html5QrCode.clear()
         } else {
+          this.decodedData = null
           this.invalid = true
         }
       } catch {
         this.invalid = true
       }
-    }
-    var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 1, qrbox: 250, formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE] }, false)
-    html5QrcodeScanner.render(onScanSuccess, null)
+    }, null)
   }
 
   private instanceOfObjeto(object: any): object is Objeto {

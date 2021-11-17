@@ -1,63 +1,81 @@
 <div class="container">
-  <div class="py-5 text-center">
+  <div class="pt-5 pb-2 text-center">
     <h2>Demo</h2>
   </div>
-  <form [formGroup]="demoForm">
-    <div class="form-row">
-      <ng-container *ngIf="!data">
-        <div class="col-6">
-          <div class="form-group">
-            <label for="one">Input one</label>
-            <input type="text" class="form-control" id="one" formControlName="one">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link active" id="gen-tab" data-toggle="tab" href="#gen" role="tab" aria-controls="gen" aria-selected="true">Generar</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" id="scan-tab" data-toggle="tab" href="#scan" role="tab" aria-controls="scan" aria-selected="false">Escanear</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="gen" role="tabpanel" aria-labelledby="gen-tab">
+      <form [formGroup]="demoForm" class="mt-4">
+        <div class="form-row">
+          <ng-container *ngIf="!data">
+            <div class="col-6">
+              <div class="form-group">
+                <label for="one">Input one</label>
+                <input type="text" class="form-control" id="one" formControlName="one">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="one">Input two</label>
+                <input type="text" class="form-control" id="two" formControlName="two">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="one">Input three</label>
+                <input type="text" class="form-control" id="three" formControlName="three">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label for="one">Input four</label>
+                <input type="text" class="form-control" id="four" formControlName="four">
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="form-group">
+                <label for="one">Input five</label>
+                <input type="text" class="form-control" id="five" formControlName="five">
+              </div>
+            </div>
+          </ng-container>
+          <div class="col-12 text-center" *ngIf="data">
+            <div id="2print">
+              <ngx-qrcode elementType="url" [value]="data"></ngx-qrcode>
+            </div>
           </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="one">Input two</label>
-            <input type="text" class="form-control" id="two" formControlName="two">
+          <div class="col-12">
+            <button *ngIf="!data" (click)="generate()" type="button" class="btn btn-success btn-block">Generar</button>
           </div>
+          <ng-container *ngIf="data">
+            <div class="col-6">
+              <button (click)="data = null" type="button" class="btn btn-info btn-block">Volver al formulario</button>
+            </div>
+            <div class="col-6">
+              <button (click)="printElem()" type="button" class="btn btn-secondary btn-block">Imprimir QR</button>
+            </div>
+          </ng-container>
         </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="one">Input three</label>
-            <input type="text" class="form-control" id="three" formControlName="three">
-          </div>
-        </div>
-        <div class="col-6">
-          <div class="form-group">
-            <label for="one">Input four</label>
-            <input type="text" class="form-control" id="four" formControlName="four">
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="form-group">
-            <label for="one">Input five</label>
-            <input type="text" class="form-control" id="five" formControlName="five">
-          </div>
-        </div>
-      </ng-container>
-      <div class="col-12 text-center" *ngIf="data">
-        <div id="2print">
-          <ngx-qrcode elementType="url" [value]="data"></ngx-qrcode>
-        </div>
-      </div>
-      <div class="col-12">
-        <button *ngIf="!data" (click)="generate()" type="button" class="btn btn-success btn-block">Generar</button>
-      </div>
-      <ng-container *ngIf="data">
-        <div class="col-6">
-          <button (click)="data = null" type="button" class="btn btn-info btn-block">Volver</button>
-        </div>
-        <div class="col-6">
-          <button (click)="printElem()" type="button" class="btn btn-secondary btn-block">Imprimir</button>
-        </div>
-      </ng-container>
+      </form>
     </div>
-  </form>
-  <div class="mt-4">
-    <div *ngIf="invalid" class="alert alert-danger" role="alert">
-      Código QR no válido
+    <div class="tab-pane fade" id="scan" role="tabpanel" aria-labelledby="scan-tab">
+      <div [class.d-none]="decodedData" class="mt-4">
+        <div *ngIf="invalid" class="alert alert-danger" role="alert">
+          Código QR no válido
+        </div>
+        <div style="width: 100%" id="reader"></div>
+      </div>
+      <div *ngIf="decodedData" class="mt-4">
+        <pre>{{ decodedData | json }}</pre>
+        <button (click)="decodedData = null" type="button" class="btn btn-info btn-block">Volver a scanear</button>
+      </div>
     </div>
-    <div style="width: 100%" id="reader"></div>
   </div>
 </div>
