@@ -60,7 +60,11 @@ export class AppComponent implements OnInit {
   }
 
   getPermission() {
-    Html5Qrcode.getCameras()
+    Html5Qrcode.getCameras().then(devices => {
+      if (devices && devices.length) {
+        this.notFound = false
+      }
+    })
   }
 
   printElem() {
