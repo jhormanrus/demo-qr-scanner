@@ -63,7 +63,20 @@ export class AppComponent implements OnInit {
     Html5Qrcode.getCameras().then(devices => {
       if (devices && devices.length) {
         this.notFound = false
-        location.reload()
+        const html5QrCode2 = new Html5Qrcode("reader", { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false })
+        html5QrCode2.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
+          try {
+            this.decodedData = JSON.parse(decodedText)
+            if (this.instanceOfObjeto(this.decodedData)) {
+              html5QrCode2.clear()
+            } else {
+              this.decodedData = null
+              this.invalid = true
+            }
+          } catch {
+            this.invalid = true
+          }
+        }, null).catch(() => this.notFound = true)
       }
     })
   }
