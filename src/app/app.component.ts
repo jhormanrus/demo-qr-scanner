@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   data: string
   decodedData: Objeto
   invalid = false
+  notFound = false
 
   constructor(private fb: FormBuilder) {}
 
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
       } catch {
         this.invalid = true
       }
-    }, null)
+    }, null).catch(() => this.notFound = true)
   }
 
   private instanceOfObjeto(object: any): object is Objeto {
@@ -56,6 +57,10 @@ export class AppComponent implements OnInit {
       five: this.demoForm.get('five').value,
     }
     this.data = JSON.stringify(obj)
+  }
+
+  getPermission() {
+    Html5Qrcode.getCameras()
   }
 
   printElem() {
