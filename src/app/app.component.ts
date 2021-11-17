@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   data: string
   decodedData: Objeto
   invalid = false
-  notFound = true
+  notFound = false
 
   constructor(private fb: FormBuilder) {}
 
@@ -28,7 +28,19 @@ export class AppComponent implements OnInit {
       five: this.fb.control('dato 5')
     })
     const html5QrCode = new Html5Qrcode("reader", { formatsToSupport: [Html5QrcodeSupportedFormats.QR_CODE], verbose: false })
-    this.getPermission(html5QrCode)
+    html5QrCode.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
+      try {
+        this.decodedData = JSON.parse(decodedText)
+        if (this.instanceOfObjeto(this.decodedData)) {
+          html5QrCode.clear()
+        } else {
+          this.decodedData = null
+          this.invalid = true
+        }
+      } catch {
+        this.invalid = true
+      }
+    }, null).catch(() => this.notFound = true)
   }
 
   private instanceOfObjeto(object: any): object is Objeto {
@@ -47,23 +59,11 @@ export class AppComponent implements OnInit {
     this.data = JSON.stringify(obj)
   }
 
-  getPermission(html5QrCode) {
+  getPermission() {
     Html5Qrcode.getCameras().then(devices => {
       if (devices && devices.length) {
         this.notFound = false
-        html5QrCode.start({ facingMode: 'environment' }, { fps: 10, qrbox: 250 }, (decodedText) => {
-          try {
-            this.decodedData = JSON.parse(decodedText)
-            if (this.instanceOfObjeto(this.decodedData)) {
-              html5QrCode.clear()
-            } else {
-              this.decodedData = null
-              this.invalid = true
-            }
-          } catch {
-            this.invalid = true
-          }
-        }, null).catch(() => this.notFound = true)
+        location.reload()
       }
     })
   }
